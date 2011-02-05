@@ -103,21 +103,25 @@ class Validate_IR
 	 */
 	function ssn($check) {
 		$pattern = '/^\d{10}$/';
-                if (!preg_match($pattern, $check)) {
-                        return false;
-                }
-                $sum = 0;
-                $equivalent = 0;
-                for ($i = 0; $i < 9; $i++) {
-                      $sum+=$check{$i} * (10 - $i);
-                      if($check{1}==$check{$i}) $equivalent++;
-                }
-                if($equivalent==9) return false;
-                $remaining = $sum % 11;
-                if ($remaining <= 1) {
-                    return ($remaining==$check{9})?true:false;
-                }else{
-                    return ((11-$remaining)==$check{9})?true:false;
-                }
+		if (!preg_match($pattern, $check)) {
+			return false;
+		}
+		$sum = 0;
+		$equivalent = 0;
+		for ($i = 0; $i < 9; $i++) {
+			$sum += $check{$i} * (10 - $i);
+			if ($check{1} == $check{$i}) {
+				$equivalent++;
+			}
+		}
+		if ($equivalent == 9) {
+			return false;
+		}
+		$remaining = $sum % 11;
+		if ($remaining <= 1) {
+			return (bool)($remaining == $check{9});
+		} else {
+			return (bool)((11 - $remaining) == $check{9});
+		}
 	}
 }
